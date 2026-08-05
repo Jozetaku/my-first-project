@@ -75,6 +75,97 @@
         .massage-bg {
             background: linear-gradient(135deg, #F8F5F0 0%, #F0EBE0 100%);
         }
+
+        .zetaku-cursor {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 42px;
+            height: 42px;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transform: translate3d(-100px, -100px, 0);
+            transition: opacity 150ms ease;
+            will-change: transform;
+        }
+
+        .zetaku-cursor,
+        .zetaku-cursor * {
+            box-sizing: border-box;
+        }
+
+        .zetaku-cursor.is-visible {
+            opacity: 1;
+        }
+
+        .zetaku-cursor__tool {
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(1px 1.5px 1px rgb(35 23 12 / 0.4));
+        }
+
+        .zetaku-cursor__pulse {
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            width: 16px;
+            height: 16px;
+            border: 1px solid #C5A46E;
+            border-radius: 50%;
+            background: rgb(197 164 110 / 0.14);
+            box-shadow: 0 0 20px 8px rgb(197 164 110 / 0.22);
+            transform: translate(-50%, -50%);
+            transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+        }
+
+        .zetaku-cursor__pulse::after {
+            content: "";
+            position: absolute;
+            inset: -11px;
+            border: 1px solid rgb(44 95 45 / 0.32);
+            border-radius: 50%;
+            animation: zetaku-cursor-breathe 1.9s ease-in-out infinite;
+        }
+
+        .zetaku-cursor.is-interactive .zetaku-cursor__pulse {
+            border-color: #2C5F2D;
+            background: rgb(44 95 45 / 0.18);
+            box-shadow: 0 0 22px 9px rgb(197 164 110 / 0.28);
+        }
+
+        .zetaku-cursor.is-interactive .zetaku-cursor__pulse::after {
+            border-color: rgb(44 95 45 / 0.55);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            html.has-zetaku-cursor,
+            html.has-zetaku-cursor * {
+                cursor: none !important;
+            }
+        }
+
+        @keyframes zetaku-cursor-breathe {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.78;
+            }
+            50% {
+                transform: scale(1.28);
+                opacity: 0.32;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .zetaku-cursor__pulse::after {
+                animation: none;
+            }
+        }
     </style>
 </head>
 <body class="bg-[#F8F5F0] text-[#1F2A1F]">
@@ -308,6 +399,17 @@
         </div>
     </footer>
 
+    <div class="zetaku-cursor" data-zetaku-cursor aria-hidden="true">
+        <img
+            class="zetaku-cursor__tool"
+            src="assets/zetaku-wood-cursor.png"
+            alt=""
+            width="256"
+            height="256"
+            decoding="async">
+        <span class="zetaku-cursor__pulse"></span>
+    </div>
+
     <script>
         // Tailwind script
         function initializeTailwind() {
@@ -324,6 +426,115 @@
                 }
             });
         });
+
+        const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+        const customCursor = document.querySelector('[data-zetaku-cursor]');
+
+        if (customCursor) {
+            const cursorImage = customCursor.querySelector('.zetaku-cursor__tool');
+            const interactiveSelector = 'a, button, input, textarea, select, summary, [role="button"], [data-cursor-interactive]';
+            let pointerX = -100;
+            let pointerY = -100;
+            let animationFrame = 0;
+            let enabled = false;
+            let touchPointerId = null;
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchMoved = false;
+            let touchTarget = null;
+
+            const renderCursor = () => {
+                customCursor.style.transform = `translate3d(${pointerX}px, ${pointerY}px, 0)`;
+                animationFrame = 0;
+            };
+
+            const isInteractive = (target) => (
+                target instanceof Element && Boolean(target.closest(interactiveSelector))
+            );
+
+            const updateCursorPosition = (x, y, target) => {
+                pointerX = x;
+                pointerY = y;
+                customCursor.classList.add('is-visible');
+                customCursor.classList.toggle('is-interactive', isInteractive(target));
+
+                if (!animationFrame) {
+                    animationFrame = requestAnimationFrame(renderCursor);
+                }
+            };
+
+            const handlePointerMove = (event) => {
+                updateCursorPosition(event.clientX, event.clientY, event.target);
+            };
+
+            const hideCursor = () => {
+                customCursor.classList.remove('is-visible', 'is-interactive');
+            };
+
+            const resetTouch = () => {
+                touchPointerId = null;
+                touchMoved = false;
+                touchTarget = null;
+            };
+
+            const handleTouchStart = (event) => {
+                if (event.pointerType !== 'touch') return;
+                touchPointerId = event.pointerId;
+                touchStartX = event.clientX;
+                touchStartY = event.clientY;
+                touchMoved = false;
+                touchTarget = event.target;
+            };
+
+            const handleTouchMove = (event) => {
+                if (event.pointerType !== 'touch' || event.pointerId !== touchPointerId) return;
+                touchMoved = Math.hypot(
+                    event.clientX - touchStartX,
+                    event.clientY - touchStartY,
+                ) > 10;
+            };
+
+            const handleTouchEnd = (event) => {
+                if (event.pointerType !== 'touch' || event.pointerId !== touchPointerId) return;
+                if (!touchMoved) {
+                    updateCursorPosition(event.clientX, event.clientY, touchTarget);
+                }
+                resetTouch();
+            };
+
+            const handleTouchCancel = (event) => {
+                if (event.pointerId === touchPointerId) resetTouch();
+            };
+
+            const enableCursor = () => {
+                if (enabled || !cursorImage.naturalWidth) return;
+                enabled = true;
+
+                if (finePointer.matches) {
+                    document.documentElement.classList.add('has-zetaku-cursor');
+                    document.addEventListener('pointermove', handlePointerMove, { passive: true });
+                    document.documentElement.addEventListener('mouseleave', hideCursor);
+                    return;
+                }
+
+                document.addEventListener('pointerdown', handleTouchStart, { passive: true });
+                document.addEventListener('pointermove', handleTouchMove, { passive: true });
+                document.addEventListener('pointerup', handleTouchEnd, { passive: true });
+                document.addEventListener('pointercancel', handleTouchCancel, { passive: true });
+            };
+
+            const disableCursor = () => {
+                document.documentElement.classList.remove('has-zetaku-cursor');
+                hideCursor();
+            };
+
+            cursorImage.addEventListener('load', enableCursor, { once: true });
+            cursorImage.addEventListener('error', disableCursor, { once: true });
+
+            if (cursorImage.complete) {
+                enableCursor();
+            }
+        }
         
         // Initialize
         initializeTailwind();
