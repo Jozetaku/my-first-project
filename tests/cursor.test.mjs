@@ -19,7 +19,7 @@ const indexHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8'
 test('cursor markup and approved dimensions are present', () => {
   assert.match(indexHtml, /data-zetaku-cursor/);
   assert.match(indexHtml, /assets\/zetaku-wood-cursor\.png/);
-  assert.match(indexHtml, /\.zetaku-cursor\s*\{[^}]*width:\s*42px;[^}]*height:\s*42px;/s);
+  assert.match(indexHtml, /\.zetaku-cursor\s*\{[^}]*width:\s*50px;[^}]*height:\s*50px;/s);
   assert.match(indexHtml, /\.zetaku-cursor__pulse\s*\{[^}]*width:\s*16px;[^}]*height:\s*16px;/s);
   assert.match(indexHtml, /\.zetaku-cursor__pulse::after\s*\{[^}]*inset:\s*-11px;/s);
 });
