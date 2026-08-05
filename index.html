@@ -100,6 +100,11 @@
             opacity: 1;
         }
 
+        .zetaku-cursor.is-touch-fading {
+            transition-duration: 500ms;
+            opacity: 0;
+        }
+
         .zetaku-cursor__tool {
             position: absolute;
             top: -1px;
@@ -162,6 +167,10 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
+            .zetaku-cursor {
+                transition-duration: 0ms;
+            }
+
             .zetaku-cursor__pulse::after {
                 animation: none;
             }
@@ -437,11 +446,9 @@
             let pointerY = -100;
             let animationFrame = 0;
             let enabled = false;
-            let touchPointerId = null;
-            let touchStartX = 0;
-            let touchStartY = 0;
-            let touchMoved = false;
-            let touchTarget = null;
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            let touchIdentifier = null;
+            let fadeTimer = 0;
 
             const renderCursor = () => {
                 customCursor.style.transform = `translate3d(${pointerX}px, ${pointerY}px, 0)`;
@@ -467,43 +474,61 @@
                 updateCursorPosition(event.clientX, event.clientY, event.target);
             };
 
-            const hideCursor = () => {
-                customCursor.classList.remove('is-visible', 'is-interactive');
+            const finishTouchCursor = () => {
+                customCursor.classList.remove('is-visible', 'is-interactive', 'is-touch-fading');
+                customCursor.style.transform = 'translate3d(-100px, -100px, 0)';
+                fadeTimer = 0;
             };
 
-            const resetTouch = () => {
-                touchPointerId = null;
-                touchMoved = false;
-                touchTarget = null;
+            const cancelTouchFade = () => {
+                if (fadeTimer) {
+                    clearTimeout(fadeTimer);
+                    fadeTimer = 0;
+                }
+                customCursor.classList.remove('is-touch-fading');
+            };
+
+            const hideCursor = () => {
+                cancelTouchFade();
+                finishTouchCursor();
+            };
+
+            const findTrackedTouch = (touches) => (
+                Array.from(touches).find((touch) => touch.identifier === touchIdentifier)
+            );
+
+            const updateTouchCursor = (touch) => {
+                const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                updateCursorPosition(touch.clientX, touch.clientY - 30, target);
             };
 
             const handleTouchStart = (event) => {
-                if (event.pointerType !== 'touch') return;
-                touchPointerId = event.pointerId;
-                touchStartX = event.clientX;
-                touchStartY = event.clientY;
-                touchMoved = false;
-                touchTarget = event.target;
+                if (touchIdentifier !== null) return;
+                const touch = event.changedTouches[0];
+                if (!touch) return;
+
+                touchIdentifier = touch.identifier;
+                cancelTouchFade();
+                updateTouchCursor(touch);
             };
 
             const handleTouchMove = (event) => {
-                if (event.pointerType !== 'touch' || event.pointerId !== touchPointerId) return;
-                touchMoved = Math.hypot(
-                    event.clientX - touchStartX,
-                    event.clientY - touchStartY,
-                ) > 10;
+                const touch = findTrackedTouch(event.touches);
+                if (touch) updateTouchCursor(touch);
             };
 
             const handleTouchEnd = (event) => {
-                if (event.pointerType !== 'touch' || event.pointerId !== touchPointerId) return;
-                if (!touchMoved) {
-                    updateCursorPosition(event.clientX, event.clientY, touchTarget);
-                }
-                resetTouch();
-            };
+                const touch = findTrackedTouch(event.changedTouches);
+                if (!touch) return;
 
-            const handleTouchCancel = (event) => {
-                if (event.pointerId === touchPointerId) resetTouch();
+                touchIdentifier = null;
+                if (reducedMotion.matches) {
+                    finishTouchCursor();
+                    return;
+                }
+
+                customCursor.classList.add('is-touch-fading');
+                fadeTimer = window.setTimeout(finishTouchCursor, 500);
             };
 
             const enableCursor = () => {
@@ -517,10 +542,10 @@
                     return;
                 }
 
-                document.addEventListener('pointerdown', handleTouchStart, { passive: true });
-                document.addEventListener('pointermove', handleTouchMove, { passive: true });
-                document.addEventListener('pointerup', handleTouchEnd, { passive: true });
-                document.addEventListener('pointercancel', handleTouchCancel, { passive: true });
+                document.addEventListener('touchstart', handleTouchStart, { passive: true });
+                document.addEventListener('touchmove', handleTouchMove, { passive: true });
+                document.addEventListener('touchend', handleTouchEnd, { passive: true });
+                document.addEventListener('touchcancel', handleTouchEnd, { passive: true });
             };
 
             const disableCursor = () => {

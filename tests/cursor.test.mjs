@@ -24,7 +24,7 @@ test('cursor markup and approved dimensions are present', () => {
   assert.match(indexHtml, /\.zetaku-cursor__pulse::after\s*\{[^}]*inset:\s*-11px;/s);
 });
 
-test('cursor activates safely and supports desktop and persistent touch input', () => {
+test('cursor activates safely and supports passive touch follow with fade', () => {
   assert.match(indexHtml, /\(hover:\s*hover\)\s*and\s*\(pointer:\s*fine\)/);
   assert.match(indexHtml, /prefers-reduced-motion:\s*reduce/);
   assert.match(indexHtml, /requestAnimationFrame/);
@@ -33,8 +33,15 @@ test('cursor activates safely and supports desktop and persistent touch input', 
   assert.match(indexHtml, /\.zetaku-cursor\.is-interactive\s+\.zetaku-cursor__pulse\s*\{[^}]*background:\s*rgb\(44 95 45 \/ 0\.18\)/s);
   assert.match(indexHtml, /cursorImage\.addEventListener\('load',\s*enableCursor/);
   assert.match(indexHtml, /cursorImage\.addEventListener\('error',\s*disableCursor/);
-  assert.match(indexHtml, /event\.pointerType\s*!==\s*'touch'/);
-  assert.match(indexHtml, /touchMoved\s*=\s*Math\.hypot\([^;]+\)\s*>\s*10/);
-  assert.match(indexHtml, /addEventListener\('pointerup',\s*handleTouchEnd/);
-  assert.match(indexHtml, /updateCursorPosition\(event\.clientX,\s*event\.clientY,\s*touchTarget\)/);
+  assert.match(indexHtml, /document\.elementFromPoint\(touch\.clientX,\s*touch\.clientY\)/);
+  assert.match(indexHtml, /updateCursorPosition\(touch\.clientX,\s*touch\.clientY\s*-\s*30,/);
+  assert.match(indexHtml, /touchIdentifier\s*=\s*touch\.identifier/);
+  assert.match(indexHtml, /clearTimeout\(fadeTimer\)/);
+  assert.match(indexHtml, /window\.setTimeout\(finishTouchCursor,\s*500\)/);
+  assert.match(indexHtml, /addEventListener\('touchstart',\s*handleTouchStart,\s*\{\s*passive:\s*true\s*\}\)/);
+  assert.match(indexHtml, /addEventListener\('touchmove',\s*handleTouchMove,\s*\{\s*passive:\s*true\s*\}\)/);
+  assert.match(indexHtml, /addEventListener\('touchend',\s*handleTouchEnd,\s*\{\s*passive:\s*true\s*\}\)/);
+  assert.match(indexHtml, /addEventListener\('touchcancel',\s*handleTouchEnd,\s*\{\s*passive:\s*true\s*\}\)/);
+  assert.match(indexHtml, /\.zetaku-cursor\.is-touch-fading\s*\{[^}]*transition-duration:\s*500ms;[^}]*opacity:\s*0;/s);
+  assert.doesNotMatch(indexHtml, /addEventListener\('pointerup',\s*handleTouchEnd/);
 });
