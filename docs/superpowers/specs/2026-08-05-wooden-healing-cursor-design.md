@@ -2,7 +2,7 @@
 
 ## Goal
 
-Add the exact approved Zetaku wooden healing cursor to `my-first-project`, with the approved desktop interaction plus a persistent last-touch experience on mobile, without changing the website's existing content, layout, links, scrolling, or native touch behavior.
+Add the exact approved Zetaku wooden healing cursor to `my-first-project`, with the approved desktop interaction plus a touch-follow-and-fade experience on mobile, without changing the website's existing content, layout, links, scrolling, zooming, or native touch behavior.
 
 ## Approved Approach
 
@@ -25,21 +25,23 @@ Use a self-contained copy of the proven cursor implementation. The repository wi
 - If the image fails to load or JavaScript does not initialize, retain the native cursor.
 - Keep the cursor layer non-interactive with `pointer-events: none` so it cannot block clicks.
 
-## Mobile Persistent Last-Touch Behavior
+## Mobile Touch-Follow-and-Fade Behavior
 
 - Keep the custom cursor hidden when the page first loads on a touch-first device.
-- On the first tap, show the same 42 by 42 pixel wooden tool with its tip aligned to the tap coordinates.
-- Keep the cursor visible at the most recently tapped position until the next tap or page reload.
-- Update position only from a new tap; do not follow continuous touch movement or scrolling gestures.
-- When the tapped target is a link, button, or other interactive control, retain the translucent green inner-ring state at that position.
-- When the tapped target is non-interactive page content, retain the normal gold inner-ring state.
-- Keep native touch behavior, tapping, scrolling, and link activation unchanged.
+- On `touchstart`, show the same 42 by 42 pixel wooden tool 30 CSS pixels above the active fingertip.
+- Follow the active fingertip continuously during `touchmove`, including while the page scrolls, using `requestAnimationFrame` to batch visual updates.
+- Use passive touch listeners and never call `preventDefault`, preserving native tapping, scrolling, link activation, and pinch-to-zoom.
+- Use `document.elementFromPoint` at the actual fingertip coordinates to determine whether the underlying control is interactive during a drag.
+- Use the translucent green inner-ring state while the fingertip is over a link, button, or other interactive control; otherwise use the normal gold inner-ring state.
+- On `touchend` or `touchcancel`, fade the cursor out over 500 milliseconds, then hide it off-screen.
+- If a new touch begins during the fade, cancel the pending hide, restore full opacity, and immediately follow the new fingertip.
+- Track only the first active touch identifier and ignore additional fingers so pinch-to-zoom remains unaffected.
 - Keep the cursor layer non-interactive with `pointer-events: none` so it cannot capture touches.
 
 ## Compatibility and Failure Handling
 
 - If the cursor image fails to load or JavaScript does not initialize, show no custom mobile cursor and preserve all native interaction.
-- Respect `prefers-reduced-motion: reduce` on desktop and mobile by disabling the breathing animation.
+- Respect `prefers-reduced-motion: reduce` on desktop and mobile by disabling the breathing animation; on mobile, hide immediately after release instead of fading.
 - Support iPhone portrait and landscape layouts without causing horizontal overflow.
 
 ## Integration Boundaries
@@ -52,9 +54,9 @@ Use a self-contained copy of the proven cursor implementation. The repository wi
 
 ## Verification
 
-- Automated checks confirm the image asset is a valid optimized PNG and the approved desktop, mobile, dimension, and safety rules remain present.
+- Automated checks confirm the image asset is a valid optimized PNG and the approved desktop, touch-follow, fade, dimension, and safety rules remain present.
 - Desktop browser testing confirms the custom cursor follows pointer movement, shows the correct rings, changes on interactive elements, and does not overlap the native cursor.
-- Mobile emulation confirms the cursor starts hidden, appears at the first tap, stays at the last tapped position, does not follow scrolling gestures, preserves interactive and non-interactive ring states, and never blocks controls.
+- Mobile emulation confirms the cursor starts hidden, follows the first active fingertip 30 pixels above it during taps and scrolling drags, changes ring state using the element beneath the fingertip, fades over 500 milliseconds after release, ignores additional fingers, and never blocks controls.
 - Reduced-motion testing confirms the breathing animation is disabled.
 - Asset-failure testing confirms the native cursor remains available.
 - A final comparison confirms existing links and page content are unchanged.
