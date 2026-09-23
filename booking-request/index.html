@@ -16,10 +16,10 @@
   <div class="wrap">
     <header class="top"><a class="brand" href="https://www.joemassage.no/">JOE MASSASJE</a><a class="home" href="https://www.joemassage.no/">Til forsiden ↗</a></header>
     <main>
-      <section class="hero"><span class="eyebrow">Booking request · 2026</span><h1>Finn et tidspunkt som passer.</h1><p class="lead">Velg behandling, dato og tidspunkt. Send forespørselen direkte til Joe på WhatsApp, eller kopier teksten og send den på SMS.</p><span class="status">Tid må bekreftes av Joe før den er bestilt</span></section>
+      <section class="hero"><span class="eyebrow">Booking request · 2026</span><h1>Finn et tidspunkt som passer.</h1><p class="lead">Forespør time hver dag fra 30. september til 20. oktober, kl. 11:00–19:00. Velg behandling, dato og tidspunkt, og send via WhatsApp eller SMS.</p><span class="status">Tid må bekreftes av Joe før den er bestilt</span></section>
       <div class="layout">
         <form id="booking" class="card stack" novalidate>
-          <div><h2>Din forespørsel</h2><p class="muted">Tider som allerede er reservert, kan ikke velges. Andre tider kan forespørres, men må bekreftes.</p></div>
+          <div><h2>Din forespørsel</h2><p class="muted">Alle dager 30. sep.–20. okt. 2026 · 11:00–19:00. Behandlingen må være ferdig senest kl. 19:00. Reserverte tider kan ikke velges; andre tider må bekreftes.</p></div>
           <div class="two"><div class="field"><label for="name">Navn *</label><input id="name" name="name" autocomplete="name" required maxlength="90"></div><div class="field"><label for="phone">Telefonnummer *</label><input id="phone" name="phone" autocomplete="tel" type="tel" required maxlength="35"></div></div>
           <div class="two"><div class="field"><label for="service">Behandling *</label><select id="service" required><option value="">Velg behandling</option><option>Myofascial Wood Therapy</option><option>Advanced Fascia Release</option><option>Meditative Touch Session</option></select></div><div class="field"><label for="duration">Varighet *</label><select id="duration" required><option value="60">60 minutter</option><option value="90">90 minutter</option></select></div></div>
           <div class="two"><div class="field"><label for="date">Dato *</label><select id="date" required><option value="">Velg dato</option></select></div><div class="field"><label for="time">Ønsket starttid *</label><select id="time" required disabled><option value="">Velg dato først</option></select></div></div>
@@ -33,29 +33,33 @@
         </form>
         <aside class="stack">
           <div class="card promo"><span class="eyebrow" style="color:#f3d9a7">5.–20. oktober 2026</span><h2 style="margin-top:12px">Massasjetilbud i Rogaland</h2><p><strong>599 kr/time</strong> for dagens første kunde, <strong>650 kr/time</strong> for dagens andre kunde.</p><p class="muted">Maks 2 timer per person. Gjelder datoer der Joe har ledig kapasitet. Pris og tilgjengelighet bekreftes før bestilling; tilbudet kan ikke reserveres automatisk.</p></div>
-          <div class="card"><h2>Greit å vite</h2><p class="muted note">Oversikten viser kjente bookinger fra 23. september 2026. Ledige tider og reisetid kan endre seg. Send gjerne et alternativ i notatfeltet.</p><p class="muted">25.–27. september: Haugesund. Øvrige viste datoer: Rogaland. Hjemmebesøk avtales individuelt.</p><p><a href="tel:+4793953432">+47 939 53 432</a></p></div>
+          <div class="card"><h2>Greit å vite</h2><p class="muted note">Oversikten viser kjente bookinger fra 23. september 2026. Ledige tider og reisetid kan endre seg. Send gjerne et alternativ i notatfeltet.</p><p class="muted">Forespørsler gjelder Rogaland. Hjemmebesøk avtales individuelt.</p><p><a href="tel:+4793953432">+47 939 53 432</a></p></div>
         </aside>
       </div>
     </main><footer class="foot">Joe Massasje · <a href="https://www.joemassage.no/">joemassage.no</a> · Kun forespørsler, ingen automatisk booking.</footer>
   </div>
   <script>
   (() => {
-    // Snapshot of the supplied calendar, updated 23 September 2026, 15:10 CEST.
-    // These are known bookings, NOT a complete source of working hours.
-    const days = [
-      ['2026-09-25','Fre 25. sep · Haugesund',['18:00-19:30','20:00-21:30']],
-      ['2026-09-26','Lør 26. sep · Haugesund',['07:00-09:00','09:30-11:30','12:00-14:00','14:30-16:00','18:00-20:00']],
-      ['2026-09-27','Søn 27. sep · Haugesund',['10:00-12:30','13:00-15:00','16:30-18:30','19:00-21:00']],
-      ['2026-09-28','Man 28. sep · Rogaland',['11:00-12:00','13:00-14:30','16:00-17:00','18:00-19:00','17:00-18:00']],
-      ['2026-09-29','Tir 29. sep · Rogaland',['11:00-12:00','13:00-14:00','15:00-16:00']],
-      ['2026-09-30','Ons 30. sep · Rogaland',['13:00-14:00','15:00-16:00']],
-      ['2026-10-01','Tor 1. okt · Rogaland',['14:00-16:00']],
-      ['2026-10-02','Fre 2. okt · Rogaland',['17:00-18:00']],
-      ['2026-10-03','Lør 3. okt · Rogaland',['11:00-12:30','16:00-17:00']],
-      ['2026-10-04','Søn 4. okt · Rogaland',['14:00-15:00','15:00-15:30']], // tentative extension, held back
-      ['2026-10-09','Fre 9. okt · Rogaland',['12:00-13:30']],
-      ['2026-10-18','Søn 18. okt · Rogaland',['16:00-17:00']]
-    ];
+    // Known bookings from the supplied calendar. A request is never an automatic booking.
+    const bookedByDate = {
+      '2026-09-30':['13:00-14:00','15:00-16:00'],
+      '2026-10-01':['14:00-16:00'],
+      '2026-10-02':['17:00-18:00'],
+      '2026-10-03':['11:00-12:30','16:00-17:00'],
+      '2026-10-04':['14:00-15:00','15:00-15:30'], // tentative extension held back
+      '2026-10-09':['12:00-13:30'],
+      '2026-10-14':['17:30-18:30'], // blocked, not a confirmed booking
+      '2026-10-18':['16:00-17:00']
+    };
+    const dayLabel = date => {
+      const text = new Intl.DateTimeFormat('nb-NO',{weekday:'short',day:'numeric',month:'short',timeZone:'Europe/Oslo'}).format(new Date(date+'T12:00:00Z'));
+      return text[0].toUpperCase()+text.slice(1)+' · Rogaland';
+    };
+    const days = [];
+    for(let value=Date.UTC(2026,8,30);value<=Date.UTC(2026,9,20);value+=86400000){
+      const date=new Date(value).toISOString().slice(0,10);
+      days.push([date,dayLabel(date),bookedByDate[date]||[]]);
+    }
     const $ = id => document.getElementById(id);
     const mins = hhmm => {const [h,m]=hhmm.split(':').map(Number);return h*60+m};
     const clock = value => String(Math.floor(value/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
@@ -70,9 +74,10 @@
       if(!day)return;
       const booked=day[2].map(interval=>interval.split('-').map(mins));
       const actual=day[0]==='2026-10-04'?day[2].slice(0,1):day[2];
-      $('bookedInfo').textContent='Allerede reservert: '+actual.join(', ')+(day[0]==='2026-10-04'?'. 15:00–15:30 er foreløpig holdt av.':'')+' Andre tidspunkt er forespørsler, ikke bekreftet ledighet.';
+      const notice=day[0]==='2026-10-14'?'17:30–18:30 er sperret.':actual.length?'Allerede reservert: '+actual.join(', ')+'.':'Ingen reserverte tider oppført denne dagen.';
+      $('bookedInfo').textContent=notice+(day[0]==='2026-10-04'?' 15:00–15:30 er foreløpig holdt av.':'')+' Andre tidspunkt er forespørsler, ikke bekreftet ledighet.';
       const now=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Oslo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date());
-      for(let start=7*60;start+duration<=22*60;start+=30){
+      for(let start=11*60;start+duration<=19*60;start+=30){
         if(date===osloToday()&&start<=mins(now))continue;
         if(booked.some(([a,b])=>start<b&&start+duration>a))continue;
         select.add(new Option(clock(start)+'–'+clock(start+duration),clock(start)));
