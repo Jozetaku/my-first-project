@@ -63,6 +63,7 @@
     const $ = id => document.getElementById(id);
     const mins = hhmm => {const [h,m]=hhmm.split(':').map(Number);return h*60+m};
     const clock = value => String(Math.floor(value/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
+    const displayClock = value => clock(value).replace(':','.');
     const osloToday = () => new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Oslo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
     const options = days.filter(d=>d[0]>=osloToday());
     for(const [date,label] of options){const o=new Option(label,date);$('date').add(o)}
@@ -80,7 +81,7 @@
       for(let start=11*60;start+duration<=19*60;start+=30){
         if(date===osloToday()&&start<=mins(now))continue;
         if(booked.some(([a,b])=>start<b&&start+duration>a))continue;
-        select.add(new Option(clock(start)+'–'+clock(start+duration),clock(start)));
+        select.add(new Option(displayClock(start),clock(start)));
       }
       if(select.options.length===1)select.options[0].text='Ingen forespørselstider her';
     }
@@ -95,8 +96,8 @@
       e.preventDefault();const error=$('error');error.classList.add('hidden');
       const fields=['name','phone','service','date','time'];
       for(const id of fields){if(!$(id).value.trim()){error.textContent='Fyll ut alle obligatoriske felt og velg et tidspunkt.';error.classList.remove('hidden');$(id).focus();return}}
-      const day=days.find(d=>d[0]===$('date').value),start=mins($('time').value),end=clock(start+Number($('duration').value));
-      const text=['Hei Joe! Jeg ønsker å spørre om massasjetime.','',`Navn: ${$('name').value.trim()}`,`Telefon: ${$('phone').value.trim()}`,`Behandling: ${$('service').value}`,`Dato: ${day[1]}`,`Ønsket tid: ${clock(start)}–${end}`,`Varighet: ${$('duration').value} minutter`,`Sted/adresse: ${$('place').value.trim()||'Avtales'}`,`Notat: ${$('note').value.trim()||'Ingen'}`,'','Dette er en forespørsel. Kan du bekrefte ledighet, pris og sted?'].join('\n');
+      const day=days.find(d=>d[0]===$('date').value),start=mins($('time').value);
+      const text=['Hei Joe! Jeg ønsker å spørre om massasjetime.','',`Navn: ${$('name').value.trim()}`,`Telefon: ${$('phone').value.trim()}`,`Behandling: ${$('service').value}`,`Dato: ${day[1]}`,`Ønsket starttid: ${displayClock(start)}`,`Varighet: ${$('duration').value} minutter`,`Sted/adresse: ${$('place').value.trim()||'Avtales'}`,`Notat: ${$('note').value.trim()||'Ingen'}`,'','Dette er en forespørsel. Kan du bekrefte ledighet, pris og sted?'].join('\n');
       $('message').textContent=text;$('whatsapp').href='https://wa.me/4793953432?text='+encodeURIComponent(text);$('result').classList.remove('hidden');
       $('result').scrollIntoView({behavior:'smooth',block:'nearest'});
       if($('channel').value==='whatsapp')window.open($('whatsapp').href,'_blank','noopener');
