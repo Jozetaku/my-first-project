@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="no">
+<html lang="nb">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,164 +18,85 @@
   <div class="wrap">
     <header class="top"><a class="brand" href="https://www.joemassage.no/">JOE MASSASJE</a><a class="home" href="https://www.joemassage.no/">Til forsiden ↗</a></header>
     <main>
-      <section class="hero"><span class="eyebrow">Booking request · 2026</span><h1>Finn et tidspunkt som passer.</h1><p class="lead">Forespør time hver dag fra 30. september til 20. oktober, kl. 11:00–19:00. Velg behandling, dato og tidspunkt, og send via WhatsApp eller SMS.</p><span class="status">Tid må bekreftes av Joe før den er bestilt</span></section>
-      <section class="card calendar" aria-labelledby="calendarTitle">
-        <div class="calendar-head"><div><h2 id="calendarTitle">Se ledige og opptatte tider</h2><p class="muted">30. september–20. oktober 2026 · alle dager 11.00–19.00. Velg en dato, og trykk på en grønn starttid for å fylle ut forespørselen.</p></div></div>
-        <div class="key" aria-label="Forklaring"><span><i></i>Kan forespørres</span><span><i class="busy"></i>Reservert / overlapper</span><span><i class="held"></i>Foreløpig holdt</span><span><i class="closed"></i>Sperret / for sent</span></div>
-        <div class="weekdays" aria-hidden="true"><span>Man</span><span>Tir</span><span>Ons</span><span>Tor</span><span>Fre</span><span>Lør</span><span>Søn</span></div>
-        <div id="dateGrid" class="date-grid" aria-label="Velg dato i kalenderen"></div>
-        <div id="calendarDetail" class="calendar-detail" aria-live="polite"><h3>Velg en dato for å se tidene</h3></div>
-      </section>
+      <section class="hero"><span class="eyebrow">Booking request</span><h1>Forespør om massasjetime.</h1><p class="lead">Velg behandling og oppgi når det passer for deg. Joe bekrefter pris, sted og tidspunkt før timen er bestilt.</p><span class="status">Kun forespørsel – ingen automatisk booking</span></section>
       <div class="layout">
         <form id="booking" class="card stack" novalidate>
-          <div><h2>Din forespørsel</h2><p class="muted">Alle dager 30. sep.–20. okt. 2026 · 11:00–19:00. Behandlingen må være ferdig senest kl. 19:00. Reserverte tider kan ikke velges; andre tider må bekreftes.</p></div>
+          <div><h2>Din forespørsel</h2><p class="muted">Dato og klokkeslett er ønsker, ikke bekreftet ledighet. Du får svar fra Joe før en time avtales.</p></div>
           <div class="two"><div class="field"><label for="name">Navn *</label><input id="name" name="name" autocomplete="name" required maxlength="90"></div><div class="field"><label for="phone">Telefonnummer *</label><input id="phone" name="phone" autocomplete="tel" type="tel" required maxlength="35"></div></div>
           <div class="two"><div class="field"><label for="service">Behandling *</label><select id="service" required><option value="">Velg behandling</option><option>Myofascial Wood Therapy</option><option>Advanced Fascia Release</option><option>Meditative Touch Session</option></select></div><div class="field"><label for="duration">Varighet *</label><select id="duration" required><option value="60">60 minutter</option><option value="90">90 minutter</option></select></div></div>
-          <div class="two"><div class="field"><label for="date">Dato *</label><select id="date" required><option value="">Velg dato</option></select></div><div class="field"><label for="time">Ønsket starttid *</label><select id="time" required disabled><option value="">Velg dato først</option></select></div></div>
-          <div id="bookedInfo" class="warning hidden" aria-live="polite"></div>
-          <div class="field"><label for="place">Sted / adresse for behandlingen</label><input id="place" autocomplete="street-address" maxlength="160" placeholder="Skriv adresse hvis du ønsker hjemmebesøk"></div>
-          <div class="field"><label for="note">Notat til Joe</label><textarea id="note" maxlength="800" placeholder="Fortell gjerne hva du ønsker hjelp med eller spør om behandlingen"></textarea><span class="fine">Ikke oppgi sensitive helseopplysninger i dette skjemaet.</span></div>
+          <div class="two"><div class="field"><label for="date">Ønsket dato *</label><input id="date" name="date" type="date" required></div><div class="field"><label for="time">Ønsket starttid *</label><input id="time" name="time" type="time" required></div></div>
+          <div class="field"><label for="place">Område ved hjemmebesøk (valgfritt)</label><input id="place" maxlength="100" placeholder="Oppgi bydel eller område; adresse avtales senere"></div>
+          <div class="field"><label for="note">Notat til Joe</label><textarea id="note" maxlength="800" placeholder="Spørsmål eller praktiske ønsker"></textarea><span class="fine">Ikke oppgi helseopplysninger eller full adresse her. Teksten sendes via WhatsApp eller SMS når du selv velger å sende den.</span></div>
           <div class="field"><label for="channel">Hvordan vil du sende?</label><select id="channel"><option value="whatsapp">WhatsApp</option><option value="sms">Kopier tekst til SMS</option></select></div>
           <p class="error hidden" id="error" role="alert"></p>
           <button class="button" type="submit">Lag bookingforespørsel</button>
           <div id="result" class="hidden" aria-live="polite"><p><strong>Forespørselen er klar.</strong> Timen er ikke bestilt før Joe bekrefter den.</p><div class="receipt" id="message"></div><div class="actions" style="margin-top:15px"><a id="whatsapp" class="button" href="#" target="_blank" rel="noopener">Åpne WhatsApp</a><button id="copy" class="button secondary" type="button">Kopier tekst til SMS</button></div><p class="fine">Hvis WhatsApp ikke åpnes, kopier teksten og send SMS til <a href="sms:+4793953432">+47 939 53 432</a>. Husk å trykke «Send» i meldingsappen.</p></div>
         </form>
         <aside class="stack">
-          <div class="card promo"><span class="eyebrow" style="color:#f3d9a7">5.–20. oktober 2026</span><h2 style="margin-top:12px">Massasjetilbud i Rogaland</h2><p><strong>599 kr/time</strong> for dagens første kunde, <strong>650 kr/time</strong> for dagens andre kunde.</p><p class="muted">Maks 2 timer per person. Gjelder datoer der Joe har ledig kapasitet. Pris og tilgjengelighet bekreftes før bestilling; tilbudet kan ikke reserveres automatisk.</p></div>
-          <div class="card"><h2>Greit å vite</h2><p class="muted note">Kalenderen viser kjente bookinger og mulige starttider, ikke bekreftet ledighet. Nye bookinger og reisetid kan endre seg. Send gjerne et alternativ i notatfeltet.</p><p class="muted">Forespørsler gjelder Rogaland. Hjemmebesøk avtales individuelt.</p><p><a href="tel:+4793953432">+47 939 53 432</a></p></div>
+          
+          <div class="card"><h2>Greit å vite</h2><p class="muted note">Gi gjerne beskjed dersom du er fleksibel med tidspunktet. Pris og tilgjengelighet bekreftes før booking.</p><p class="muted">Forespørsler gjelder Rogaland. Hjemmebesøk avtales individuelt.</p><p><a href="tel:+4793953432">+47 939 53 432</a></p></div>
         </aside>
       </div>
     </main><footer class="foot">Joe Massasje · <a href="https://www.joemassage.no/">joemassage.no</a> · Kun forespørsler, ingen automatisk booking.</footer>
   </div>
   <script>
   (() => {
-    // Known bookings supplied by Joe. Requests remain unconfirmed until Joe replies.
-    const bookedByDate = {
-      '2026-09-30':['12:00-13:00','13:00-14:00','15:00-16:00'],
-      '2026-10-01':['14:00-16:00'],
-      '2026-10-02':['17:00-18:00'],
-      '2026-10-03':['11:00-12:30','16:00-17:00'],
-      '2026-10-04':['14:00-15:00','15:00-15:30'], // tentative extension held back
-      '2026-10-09':['12:00-13:30'],
-      '2026-10-14':['17:30-18:30'], // blocked, not a confirmed booking
-      '2026-10-18':['16:00-17:00']
-    };
-    const dayLabel = date => {
-      const text = new Intl.DateTimeFormat('nb-NO',{weekday:'short',day:'numeric',month:'short',timeZone:'Europe/Oslo'}).format(new Date(date+'T12:00:00Z'));
-      return text[0].toUpperCase()+text.slice(1)+' · Rogaland';
-    };
-    const days = [];
-    for(let value=Date.UTC(2026,8,30);value<=Date.UTC(2026,9,20);value+=86400000){
-      const date=new Date(value).toISOString().slice(0,10);
-      days.push([date,dayLabel(date),bookedByDate[date]||[]]);
-    }
     const $ = id => document.getElementById(id);
-    const mins = hhmm => {const [h,m]=hhmm.split(':').map(Number);return h*60+m};
-    const clock = value => String(Math.floor(value/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
-    const displayClock = value => clock(value).replace(':','.');
-    const periods = date => (bookedByDate[date]||[]).map(interval=>{
-      const [from,to]=interval.split('-').map(mins);
-      const kind=date==='2026-10-14'?'blocked':date==='2026-10-04'&&from===15*60?'held':'reserved';
-      return {from,to,kind};
-    });
-    const osloToday = () => new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Oslo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-    const options = days.filter(d=>d[0]>=osloToday());
-    for(const [date,label] of options){const o=new Option(label,date);$('date').add(o)}
-    const statusLabel={available:'Kan forespørres',reserved:'Reservert',conflict:'Overlapper en reservasjon',held:'Foreløpig holdt',blocked:'Sperret',late:'For sent for valgt varighet'};
-    function slotStatus(date,start,duration){
-      if(date<osloToday()||start+duration>19*60)return 'late';
-      if(date===osloToday()){
-        const now=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Oslo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date());
-        if(start<=mins(now))return 'late';
-      }
-      const overlap=periods(date).find(({from,to})=>start<to&&start+duration>from);
-      if(!overlap)return 'available';
-      return overlap.kind==='reserved'&&start<overlap.from?'conflict':overlap.kind;
-    }
-    const grid=$('dateGrid');
-    for(let value=Date.UTC(2026,8,28);value<=Date.UTC(2026,9,25);value+=86400000){
-      const date=new Date(value).toISOString().slice(0,10);
-      const button=document.createElement('button');button.type='button';button.className='day';button.dataset.date=date;
-      button.disabled=date<'2026-09-30'||date>'2026-10-20'||date<osloToday();
-      const number=document.createElement('span');number.className='number';number.textContent=String(new Date(value).getUTCDate());
-      const info=document.createElement('small');button.append(number,info);
-      button.addEventListener('click',()=>{$('date').value=date;updateTimes();$('calendarDetail').scrollIntoView({behavior:'smooth',block:'nearest'})});
-      grid.append(button);
-    }
-    function renderCalendar(){
-      const date=$('date').value,duration=Number($('duration').value),selected=$('time').value;
-      for(const button of grid.children){
-        const value=button.dataset.date;
-        const count=Array.from({length:16},(_,i)=>11*60+i*30).filter(start=>slotStatus(value,start,duration)==='available').length;
-        button.classList.toggle('active',value===date);
-        button.classList.toggle('has-booked',!!bookedByDate[value]?.length);
-        button.setAttribute('aria-pressed',String(value===date));
-        button.querySelector('small').textContent=button.disabled?'Utenfor':count?`${count} starttider`:'Ingen tider';
-        button.setAttribute('aria-label',`${value.slice(8)}.${value.slice(5,7)}.2026: ${button.disabled?'utenfor bestillingsperioden':`${count} mulige starttider`}`);
-      }
-      const detail=$('calendarDetail');detail.replaceChildren();
-      const title=document.createElement('h3');title.textContent=date?`${dayLabel(date)} · ${duration} minutter`:'Velg en dato for å se tidene';detail.append(title);
-      if(!date)return;
-      const hint=document.createElement('p');hint.className='muted';hint.textContent='Trykk på en grønn starttid. Røde og grå tidspunkt kan ikke velges for denne varigheten.';detail.append(hint);
-      const slots=document.createElement('div');slots.className='slots';slots.setAttribute('aria-label','Starttider for valgt dato');
-      for(let start=11*60;start<19*60;start+=30){
-        const status=slotStatus(date,start,duration),button=document.createElement('button');button.type='button';button.className='slot '+status;
-        button.disabled=status!=='available';button.setAttribute('aria-label',`${displayClock(start)}: ${statusLabel[status]}`);
-        if(selected===clock(start))button.classList.add('selected');
-        const time=document.createElement('strong');time.textContent=displayClock(start);
-        const note=document.createElement('small');note.textContent=statusLabel[status];button.append(time,note);
-        if(!button.disabled)button.addEventListener('click',()=>{$('time').value=clock(start);renderCalendar();$('booking').scrollIntoView({behavior:'smooth',block:'start'})});
-        slots.append(button);
-      }
-      detail.append(slots);
-      const known=periods(date);
-      if(known.length){
-        const heading=document.createElement('p');heading.className='muted';heading.textContent='Registrert for denne datoen:';detail.append(heading);
-        const list=document.createElement('ul');list.className='known-bookings';
-        for(const {from,to,kind} of known){const item=document.createElement('li');item.textContent=`${displayClock(from)}–${displayClock(to)} · ${statusLabel[kind]}`;list.append(item)}
-        detail.append(list);
-      }
-    }
-    function updateTimes(){
-      const date=$('date').value, day=days.find(d=>d[0]===date), duration=Number($('duration').value), select=$('time');
+    const osloToday = () => new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Europe/Oslo', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(new Date());
+    $('date').min = osloToday();
+
+    $('service').addEventListener('change', () => {
+      const advanced = $('service').value === 'Advanced Fascia Release';
+      for (const option of $('duration').options) option.disabled = advanced && option.value !== '90';
+      if (advanced) $('duration').value = '90';
       $('result').classList.add('hidden');
-      select.replaceChildren(new Option(day?'Velg ønsket starttid':'Velg dato først',''));
-      select.disabled=!day;
-      $('bookedInfo').classList.toggle('hidden',!day);
-      if(!day){renderCalendar();return}
-      const known=periods(date).map(({from,to,kind})=>`${displayClock(from)}–${displayClock(to)} (${statusLabel[kind].toLowerCase()})`);
-      $('bookedInfo').textContent=(known.length?'Registrert: '+known.join(', ')+'.':'Ingen reserverte tider oppført denne dagen.')+' Andre tidspunkt må bekreftes av Joe.';
-      for(let start=11*60;start<19*60;start+=30){
-        if(slotStatus(date,start,duration)!=='available')continue;
-        select.add(new Option(displayClock(start),clock(start)));
+    });
+
+    $('booking').addEventListener('submit', event => {
+      event.preventDefault();
+      const error = $('error');
+      error.classList.add('hidden');
+      if (!$('booking').checkValidity() || $('date').value < osloToday()) {
+        error.textContent = 'Fyll ut de obligatoriske feltene og velg en dato fra i dag eller senere.';
+        error.classList.remove('hidden');
+        $('booking').reportValidity();
+        return;
       }
-      if(select.options.length===1)select.options[0].text='Ingen forespørselstider her';
-      renderCalendar();
-    }
-    $('date').addEventListener('change',updateTimes);$('duration').addEventListener('change',updateTimes);
-    $('time').addEventListener('change',()=>{$('result').classList.add('hidden');renderCalendar()});
-    $('service').addEventListener('change',()=>{
-      const advanced=$('service').value==='Advanced Fascia Release';
-      for(const option of $('duration').options)option.disabled=advanced&&option.value!=='90';
-      if(advanced)$('duration').value='90';
-      updateTimes();
+      const date = new Intl.DateTimeFormat('nb-NO', {
+        weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Oslo'
+      }).format(new Date($('date').value + 'T12:00:00Z'));
+      const message = [
+        'Hei Joe! Jeg ønsker å spørre om massasjetime.', '',
+        'Navn: ' + $('name').value.trim(),
+        'Telefon: ' + $('phone').value.trim(),
+        'Behandling: ' + $('service').value,
+        'Ønsket dato: ' + date,
+        'Ønsket starttid: ' + $('time').value,
+        'Varighet: ' + $('duration').value + ' minutter',
+        'Område ved hjemmebesøk: ' + ($('place').value.trim() || 'Avtales'),
+        'Notat: ' + ($('note').value.trim() || 'Ingen'), '',
+        'Dette er en forespørsel. Kan du bekrefte ledighet, pris og sted?'
+      ].join('\n');
+      $('message').textContent = message;
+      $('whatsapp').href = 'https://wa.me/4793953432?text=' + encodeURIComponent(message);
+      $('result').classList.remove('hidden');
+      $('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if ($('channel').value === 'sms') $('copy').focus();
     });
-    if(options.length)$('date').value=options[0][0];
-    updateTimes();
-    $('booking').addEventListener('submit', e=>{
-      e.preventDefault();const error=$('error');error.classList.add('hidden');
-      const fields=['name','phone','service','date','time'];
-      for(const id of fields){if(!$(id).value.trim()){error.textContent='Fyll ut alle obligatoriske felt og velg et tidspunkt.';error.classList.remove('hidden');$(id).focus();return}}
-      const day=days.find(d=>d[0]===$('date').value),start=mins($('time').value);
-      const text=['Hei Joe! Jeg ønsker å spørre om massasjetime.','',`Navn: ${$('name').value.trim()}`,`Telefon: ${$('phone').value.trim()}`,`Behandling: ${$('service').value}`,`Dato: ${day[1]}`,`Ønsket starttid: ${displayClock(start)}`,`Varighet: ${$('duration').value} minutter`,`Sted/adresse: ${$('place').value.trim()||'Avtales'}`,`Notat: ${$('note').value.trim()||'Ingen'}`,'','Dette er en forespørsel. Kan du bekrefte ledighet, pris og sted?'].join('\n');
-      $('message').textContent=text;$('whatsapp').href='https://wa.me/4793953432?text='+encodeURIComponent(text);$('result').classList.remove('hidden');
-      $('result').scrollIntoView({behavior:'smooth',block:'nearest'});
-      if($('channel').value==='whatsapp')window.open($('whatsapp').href,'_blank','noopener');
-      else $('copy').focus();
-    });
-    $('copy').addEventListener('click',async()=>{
-      try{await navigator.clipboard.writeText($('message').textContent);$('copy').textContent='Kopiert! Åpne SMS-appen';setTimeout(()=>$('copy').textContent='Kopier tekst til SMS',3500)}
-      catch{const range=document.createRange();range.selectNodeContents($('message'));getSelection().removeAllRanges();getSelection().addRange(range);$('copy').textContent='Marker teksten og kopier';}
+    $('copy').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText($('message').textContent);
+        $('copy').textContent = 'Kopiert! Åpne SMS-appen';
+        setTimeout(() => $('copy').textContent = 'Kopier tekst til SMS', 3500);
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents($('message'));
+        getSelection().removeAllRanges();
+        getSelection().addRange(range);
+        $('copy').textContent = 'Marker teksten og kopier';
+      }
     });
   })();
   </script>
