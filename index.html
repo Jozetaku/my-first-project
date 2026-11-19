@@ -182,6 +182,12 @@
 .zt-wrap{max-width:54rem;margin:auto}.zt-intro{display:grid;grid-template-columns:3fr 2fr;align-items:center;gap:2rem;margin-bottom:1.5rem}.zt-intro img{border-radius:1rem;width:100%;height:auto}.zt-intro h2{font-size:clamp(2rem,5vw,3rem);line-height:1.08}.zt-wrap p{margin:.75rem 0;line-height:1.6}.zt-wrap details{border:1px solid #c8d0bf;background:#fff;border-radius:1rem;margin:.5rem 0}.zt-wrap summary{cursor:pointer;display:flex;align-items:center;gap:.7rem;list-style:none;padding:1rem 1.2rem}.zt-wrap summary::-webkit-details-marker{display:none}.zt-wrap summary:after{content:'+';font-size:1.35rem;margin-left:auto}.zt-wrap details[open]>summary:after{content:'−'}.zt-wrap summary strong{font-size:1.15rem}.zt-wrap small,.zt-options strong{display:block}.zt-wrap small{color:#4c5b4b;font-size:.85rem}.zt-card summary b{margin-left:auto;white-space:nowrap;font-size:.9rem}.zt-card summary:after{margin-left:.25rem}.zt-inner{padding:0 1.2rem 1.2rem}.zt-inner a{color:#28582e;text-decoration:underline;text-underline-offset:.2em}.zt-options{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}.zt-options>div{background:#f4f6f0;border-radius:.6rem;padding:.8rem}.zt-options strong{font-size:1.25rem}.zt-options a{display:block;background:#2c5f2d;color:white;border:1px solid #2c5f2d;text-decoration:none;margin-top:.7rem;padding:.65rem .5rem;text-align:center;border-radius:.5rem;font-weight:600}.zt-options>div+div a{background:white;color:#28582e}.zt-wrap .zt-info{background:transparent}.zt-info summary,.zt-inner h3{font-weight:650}.zt-wrap :focus-visible{outline:3px solid #456d37;outline-offset:2px}@media(max-width:600px){.zt-intro{grid-template-columns:1fr;gap:.45rem}.zt-intro img{max-width:16rem}.zt-wrap summary{padding:.9rem}.zt-inner{padding:0 .9rem 1rem}}@media(max-width:380px){.zt-options{grid-template-columns:1fr}}
 </style>
 <style>.zt-inner p.zt-repeat{padding:.75rem 1rem;border-left:3px solid #997442;background:#f7f4eb}.zt-repeat strong{display:block}</style>
+<style>
+#repove-visit{width:min(100%,320px);margin:0 auto 2rem;color:#263725}
+.visit-open{display:block;position:relative;cursor:zoom-in}.visit-open img{width:100%;height:300px;object-fit:cover;object-position:center 39%;border-radius:14px}.visit-open span{position:absolute;right:10px;bottom:10px;background:#fff;color:#263725;border-radius:50%;width:32px;line-height:32px}
+#repove-visit figcaption{margin:.55rem 0;font-size:.9rem}.visit-strip,.visit-nav{display:flex;align-items:center;justify-content:center;gap:8px}.visit-strip button{padding:3px;border:2px solid transparent;border-radius:9px}.visit-strip button[aria-pressed=true]{border-color:#536546}.visit-strip img{width:52px;height:44px;object-fit:cover;border-radius:4px}
+#repove-visit dialog{margin:auto;padding:12px;border:0;border-radius:14px;background:#faf8f2;color:#253425;width:max-content;max-width:94vw;max-height:95dvh}.visit-close{display:block;margin-left:auto}.visit-large{display:block;margin:auto;max-height:68vh;max-width:85vw;object-fit:contain}.visit-nav{margin-top:4px;font-size:.9rem}.visit-nav button,.visit-close{min-width:44px;min-height:44px}.visit-open,.visit-large{touch-action:pan-y pinch-zoom}#repove-visit dialog::backdrop{background:rgba(15,22,16,.85)}
+</style>
 </head>
 <body class="bg-[#F8F5F0] text-[#1F2A1F]">
     <!-- Hero Section -->
@@ -281,7 +287,12 @@
             <h2 class="text-4xl heading-serif font-semibold text-[#1F2A1F]">About Me</h2>
         </div>
         
-        <div class="max-w-3xl mx-auto text-center"><figure><img src="assets/joe-repove.webp" alt="Joe seated in front of the REPOVE sign during his office visit" loading="lazy" decoding="async" style="width:100%;max-width:320px;height:auto;margin:1rem auto;border-radius:12px"><figcaption class="mb-6 text-sm">Joe at the REPOVE office</figcaption></figure>
+        <div class="max-w-3xl mx-auto text-center"><figure id="repove-visit">
+<a class="visit-open" href="assets/joe-repove.webp" aria-label="Enlarge photo"><img src="assets/joe-repove.webp" alt="Joe at the REPOVE office" loading="lazy"><span aria-hidden="true">⛶</span></a>
+<figcaption aria-live="polite">Joe at the REPOVE office</figcaption>
+<div class="visit-strip"><button type="button" aria-label="Show Joe at the REPOVE office" aria-pressed="true"><img src="assets/joe-repove.webp" alt="" data-caption="Joe at the REPOVE office" loading="lazy"></button><button type="button" aria-label="Show Entrance hall at REPOVE Thailand" aria-pressed="false"><img src="assets/repove-lobby.webp" alt="" data-caption="Entrance hall at REPOVE Thailand" loading="lazy"></button><button type="button" aria-label="Show Mirrored counters at REPOVE Thailand" aria-pressed="false"><img src="assets/repove-interior.webp" alt="" data-caption="Mirrored counters at REPOVE Thailand" loading="lazy"></button></div>
+<dialog aria-label="REPOVE office photos"><button type="button" class="visit-close">Close ×</button><img class="visit-large" alt=""><div class="visit-nav"><button type="button" aria-label="Previous photo">←</button><span aria-live="polite"></span><button type="button" aria-label="Next photo">→</button></div></dialog>
+</figure>
             <p class="text-xl leading-relaxed text-[#3D473D]">
                 With 18 years of experience as a Buddhist monk, I bring deep mindfulness and presence into every session. 
                 I offer <span class="font-semibold text-[#2C5F2D]">Myofascial Wood Therapy</span> 
@@ -620,5 +631,32 @@
         initializeTailwind();
         console.log('%c[Bio Link] Zetaku Bodywork page ready', 'color:#2C5F2D');
     </script>
+<script>
+(() => {
+ const gallery=document.querySelector('#repove-visit');
+ const opener=gallery.querySelector('.visit-open'), dialog=gallery.querySelector('dialog');
+ const thumbs=[...gallery.querySelectorAll('.visit-strip button')], large=dialog.querySelector('img');
+ let current=0, swiped=false;
+ function select(index){
+   current=(index+thumbs.length)%thumbs.length;
+   const photo=thumbs[current].querySelector('img'), caption=photo.dataset.caption;
+   opener.href=photo.src;
+   for(const img of [opener.querySelector('img'),large]){img.src=photo.src;img.alt=caption}
+   gallery.querySelector('figcaption').textContent=caption;
+   dialog.querySelector('span').textContent=(current+1)+' / '+thumbs.length+' · '+caption;
+   thumbs.forEach((button,i)=>button.setAttribute('aria-pressed',String(i===current)));
+ }
+ thumbs.forEach((button,i)=>button.onclick=()=>select(i));
+ opener.onclick=e=>{e.preventDefault();if(!swiped){select(current);dialog.showModal()}};
+ dialog.querySelector('.visit-close').onclick=()=>dialog.close();
+ dialog.querySelectorAll('.visit-nav button').forEach((button,i)=>button.onclick=()=>select(current+(i?1:-1)));
+ dialog.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();select(current+(e.key==='ArrowLeft'?-1:1))}};
+ for(const surface of [opener,large]){
+   let x,y;
+   surface.addEventListener('touchstart',e=>{swiped=false;x=e.touches[0].clientX;y=e.touches[0].clientY},{passive:true});
+   surface.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-x,dy=e.changedTouches[0].clientY-y;if(Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)){swiped=true;select(current+(dx<0?1:-1));setTimeout(()=>swiped=false,450)}},{passive:true});
+ }
+})();
+</script>
 </body>
 </html>
