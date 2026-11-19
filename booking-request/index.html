@@ -23,7 +23,18 @@
         <form id="booking" class="card stack" novalidate>
           <div><h2>Din forespørsel</h2><p class="muted">Dato og klokkeslett er ønsker, ikke bekreftet ledighet. Du får svar fra Joe før en time avtales.</p></div>
           <div class="two"><div class="field"><label for="name">Navn *</label><input id="name" name="name" autocomplete="name" required maxlength="90"></div><div class="field"><label for="phone">Telefonnummer *</label><input id="phone" name="phone" autocomplete="tel" type="tel" required maxlength="35"></div></div>
-          <div class="two"><div class="field"><label for="service">Behandling *</label><select id="service" required><option value="">Velg behandling</option><option>Myofascial Wood Therapy</option><option>Advanced Fascia Release</option><option>Meditative Touch Session</option></select></div><div class="field"><label for="duration">Varighet *</label><select id="duration" required><option value="60">60 minutter</option><option value="90">90 minutter</option></select></div></div>
+          <div class="two"><div class="field"><label for="service">Hovedmassasje *</label><select id="service" required><option value="">Velg behandling</option><option>Myofascial Wood Therapy</option><option>Advanced Fascia Release</option><option>Meditative Touch Session</option></select></div><div class="field"><label for="duration">Massasjens varighet *</label><select id="duration" required><option value="60">60 minutter</option><option value="90">90 minutter</option></select></div></div>
+          <div class="field"><label for="device">Apparatbehandling som tillegg (valgfritt)</label>
+            <select id="device" aria-describedby="device-help"><option value="">Ingen tilleggsbehandling</option>
+              <option value="Neck Release" data-minutes="20" data-price="225">Neck Release · 20 min · +225 kr</option>
+              <option value="Foot Recharge" data-minutes="20" data-price="249">Foot Recharge · 20 min · +249 kr</option>
+              <option value="Foot &amp; Body Reset" data-minutes="30" data-price="349">Foot &amp; Body Reset · 30 min · +349 kr</option>
+              <option value="Foot &amp; Face Ritual" data-minutes="25" data-price="449">Foot &amp; Face Ritual · 25 min · +449 kr</option>
+              <option value="Frost Age Facial" data-minutes="20" data-price="349">Frost Age Facial · 20 min · +349 kr</option>
+              <option value="Revitaluxe Body Focus" data-minutes="20" data-price="399">Revitaluxe Body Focus · 20 min · +399 kr</option>
+              <option value="Vitality Wand Winter Warmth" data-minutes="20" data-price="249">Vitality Wand Winter Warmth · 20 min · +249 kr</option>
+              <option value="Vitality Wand Winter Warmth" data-minutes="45" data-price="459">Vitality Wand Winter Warmth · 45 min · +459 kr</option>
+            </select><span class="fine" id="device-help">Velg hovedmassasje først. Tid og pris for tillegget kommer i tillegg til massasjen. <a href="/#device-treatments">Se behandlingene og introduksjonsprisene</a>.</span></div>
           <div class="two"><div class="field"><label for="date">Ønsket dato *</label><input id="date" name="date" type="date" required></div><div class="field"><label for="time">Ønsket starttid *</label><input id="time" name="time" type="time" required></div></div>
           <div class="field"><label for="place">Område ved hjemmebesøk (valgfritt)</label><input id="place" maxlength="100" placeholder="Oppgi bydel eller område; adresse avtales senere"></div>
           <div class="field"><label for="note">Notat til Joe</label><textarea id="note" maxlength="800" placeholder="Spørsmål eller praktiske ønsker"></textarea><span class="fine">Ikke oppgi helseopplysninger eller full adresse her. Teksten sendes via WhatsApp eller SMS når du selv velger å sende den.</span></div>
@@ -47,6 +58,7 @@
     }).format(new Date());
     $('date').min = osloToday();
 
+    $('booking').addEventListener('input', () => $('result').classList.add('hidden'));
     $('service').addEventListener('change', () => {
       const advanced = $('service').value === 'Advanced Fascia Release';
       for (const option of $('duration').options) option.disabled = advanced && option.value !== '90';
@@ -67,6 +79,11 @@
       const date = new Intl.DateTimeFormat('nb-NO', {
         weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Oslo'
       }).format(new Date($('date').value + 'T12:00:00Z'));
+      const device = $('device').selectedOptions[0];
+      const extra = device.value ? [
+        'Tilleggsbehandling: ' + device.value + ' · ' + device.dataset.minutes + ' min · +' + device.dataset.price + ' kr',
+        'Samlet varighet: ' + (Number($('duration').value) + Number(device.dataset.minutes)) + ' minutter'
+      ] : [];
       const message = [
         'Hei Joe! Jeg ønsker å spørre om massasjetime.', '',
         'Navn: ' + $('name').value.trim(),
@@ -75,6 +92,7 @@
         'Ønsket dato: ' + date,
         'Ønsket starttid: ' + $('time').value,
         'Varighet: ' + $('duration').value + ' minutter',
+        ...extra,
         'Område ved hjemmebesøk: ' + ($('place').value.trim() || 'Avtales'),
         'Notat: ' + ($('note').value.trim() || 'Ingen'), '',
         'Dette er en forespørsel. Kan du bekrefte ledighet, pris og sted?'
